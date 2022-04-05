@@ -2,9 +2,10 @@
 
 printf "\nWelcome to Bash-Translator\n"
 
-printf "\nEnter a word:\n"
-
 function main(){
+
+	printf "\nEnter a word:\n"
+
 	read var_word
 	
 	word_HEX=$(printf $var_word| xxd -p -u -i| sed 's/ 0X/%/g; s/%0A//; s/,//g'| tr -d "[:space:]")
@@ -15,12 +16,8 @@ function main(){
 
 	egP="\e[93mExamples|Примери\e[0m"
 
-	if [ $var_word = q ]; 
-	then
-		exit
-
 	#ENG
-	elif [[ $var_word = [A-z]* ]];
+	if [[ $var_word = [A-z]* ]];
 	then
 		curl -s https://bg.glosbe.com/en/bg/$var_word > $HOME/.Bash-Translator-temp
 
@@ -33,7 +30,7 @@ function main(){
 		# Examples
 		printf "\n $egP\n"
 
-		grep -A 1 -m 3 '<p lang="en" >' $HOME/.Bash-Translator-temp| sed 's|<p lang="en" >|EN - |; s|<p class="ml-4 " >|BG - |; s|<strong>||; s|</strong>||; s|</p>||; s|&#39;|`|g'
+		grep -A 1 -m 3 '<p lang="en" >' $HOME/.Bash-Translator-temp| sed 's|<p lang="en" >|EN - |; s|<p class="ml-4 " >|BG - |; s|<strong>||g; s|</strong>||g; s|</p>||; s|&#39;|`|g'
 		
 		printf $tildaP
 
@@ -51,22 +48,42 @@ function main(){
 		
 		# With sed command
 		grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[a-z]*"'| sed '/"phrase"/d; s/"//g'
-		
+
 		# With tr command
 		#grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[a-z]*"'| sed '/"phrase"/d'| tr -d /\"/
 		# Examples
 		printf "\n $egP\n"
 		
-		grep -A 1 -m 3 '<p >' $HOME/.Bash-Translator-temp | sed 's|<p class="ml-4 " lang="en" >|EN - |; s|<p >|BG - |; s|<strong>||; s|</strong>||; s|</p>||; s|&#39;|`|g'
+		grep -A 1 -m 3 '<p >' $HOME/.Bash-Translator-temp | sed 's|<p class="ml-4 " lang="en" >|EN - |; s|<p >|BG - |; s|<strong>||g; s|</strong>||g; s|</p>||; s|&#39;|`|g'
 
 		printf $tildaP
-
 	fi
 	
-	printf "\n\nEnter a new word or type \e[1;91mq\e[0m to \e[1;91mquit\e[0m:\n"
-	main
+	options
 }
 
-main
+function options(){
 
-#tput clear
+	printf "\n\nEnter a new word or type \e[1;91mq\e[0m to \e[1;91mquit\e[0m:\n"
+
+	read option
+
+	if [ $option = q ]; 
+	then
+		exit
+
+	#Save words option for Anki
+	elif [ $option = s ]; 
+	then
+		echo $(echo -n $var_word":" && grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[А-я]*"'| sed '/"phrase"/d; s/"//g'| tr '\n' ',') >> deck.txt
+
+		printf "\nWord has been saved\n"
+		options
+
+	elif [ $option = n ]; 
+	then
+		main	
+	fi
+}
+main
+options

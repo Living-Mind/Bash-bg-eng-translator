@@ -64,7 +64,7 @@ function main(){
 
 function options(){
 
-	printf "\n\nEnter a new word or type \e[1;91mq\e[0m to \e[1;91mquit\e[0m:\n"
+	printf "\n\nType \e[1;93mn\e[0m (\e[1;93mnew word\e[0m) | \e[1;92ms\e[0m (\e[1;92msave word\e[0m) | \e[1;91mq\e[0m (\e[1;91mquit\e[0m)\n"
 
 	read option
 
@@ -75,9 +75,19 @@ function options(){
 	#Save words option for Anki
 	elif [ $option = s ]; 
 	then
-		echo $(echo -n $var_word":" && grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[А-я]*"'| sed '/"phrase"/d; s/"//g'| tr '\n' ',') >> deck.txt
+		if [[ $var_word = [A-z]* ]]
+		then
+			echo $(echo -n $var_word":" && grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[А-я]*"'| sed '/"phrase"/d; s/"//g'| tr '\n' ',') >> Eng-Words.txt
 
-		printf "\nWord has been saved\n"
+		printf "\nWord has been \e[1;92msaved\e[0m in Eng-Words.txt (PATH:\$HOME)\n"
+
+		elif [[ $var_word != [A-z]* ]]	
+		then
+			echo $(echo -n $var_word":" && grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[A-z]*"'| sed '/"phrase"/d; s/"//g'| tr '\n' ',') >> Bg-Words.txt
+
+		printf "\nWord has been \e[1;92msaved\e[0m in Bg-Words.txt (PATH:\$HOME)\n"
+		fi
+
 		options
 
 	elif [ $option = n ]; 

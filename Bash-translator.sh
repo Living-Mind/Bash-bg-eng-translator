@@ -77,13 +77,13 @@ function options(){
 	then
 		if [[ $var_word = [A-z]* ]]
 		then
-			echo $(echo -n $var_word":" && grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[А-я]*"'| sed '/"phrase"/d; s/"//g'| tr '\n' ',') >> Eng-Words.txt
+			echo $(echo -n $var_word":" && grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[А-я]*"'| sed '/"phrase"/d; s/"//g'| tr '\n' ' ') >> Eng-Words.txt
 
 		printf "\nWord has been \e[1;92msaved\e[0m in Eng-Words.txt (PATH:\$HOME)\n"
 
 		elif [[ $var_word != [A-z]* ]]	
 		then
-			echo $(echo -n $var_word":" && grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[A-z]*"'| sed '/"phrase"/d; s/"//g'| tr '\n' ',') >> Bg-Words.txt
+			echo $(echo -n $var_word":" && grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[A-z]*"'| sed '/"phrase"/d; s/"//g'| tr '\n' ' ') >> Bg-Words.txt
 
 		printf "\nWord has been \e[1;92msaved\e[0m in Bg-Words.txt (PATH:\$HOME)\n"
 		fi

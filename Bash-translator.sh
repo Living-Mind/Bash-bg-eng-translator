@@ -62,9 +62,26 @@ function main(){
 	options
 }
 
+function otherSource() {
+	
+	curl -s https://www.ezikov.com/translate/$var_word > $HOME/.Bash-Translator-temp
+
+		# Results	
+		printf "\n $resultP\n"
+		
+		# With sed command
+		grep "<li>" $HOME/.Bash-Translator-temp| grep -v "<li><a" | sed -E "s:<li>|<\/li>.*::g; s:<i>|<\/i>::g"
+
+		printf $tildaP
+
+		printf "\n\e[1;101m*Advise: Don't use s (save word) while using o (search with other source)\e[0m"
+
+		options
+}
+
 function options(){
 
-	printf "\n\nType \e[1;93mn\e[0m (\e[1;93mnew word\e[0m) | \e[1;92ms\e[0m (\e[1;92msave word\e[0m) | \e[1;91mq\e[0m (\e[1;91mquit\e[0m)\n"
+	printf "\n\nType \e[1;93mn\e[0m (\e[1;93mnew word\e[0m) | \e[1;92ms\e[0m (\e[1;92msave word\e[0m) | \e[1;95mo\e[0m (\e[1;95msearch with other source\e[0m) | \e[1;91mq\e[0m (\e[1;91mquit\e[0m)\n"
 
 	read option
 
@@ -92,8 +109,13 @@ function options(){
 
 	elif [ $option = n ]; 
 	then
-		main	
+		main
+
+	elif [ $option = o ];
+	then
+		otherSource
 	fi
 }
 main
 options
+

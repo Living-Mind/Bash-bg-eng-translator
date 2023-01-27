@@ -2,9 +2,13 @@
 
 printf "\nWelcome to Bash-Translator\n"
 
+first="$1"
+
 function main(){
 
 	printf "\nEnter a word:\n"
+	#variable $1 added
+	#var_word=$first
 
 	read var_word
 	
@@ -25,12 +29,20 @@ function main(){
 		printf "\n $resultP\n"
 		
 		# With sed command
-		grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[А-я]*"'| sed '/"phrase"/d; s/"//g'
+		#
+	
+		grep -m 3 '</h3>' $HOME/.Bash-Translator-temp| tr -d '>'| sed 's|</h3||g'
+
+		#Old
+		#grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[А-я]*"'| sed '/"phrase"/d; s/"//g'
 
 		# Examples
 		printf "\n $egP\n"
 
-		grep -A 1 -m 3 '<p lang="en" >' $HOME/.Bash-Translator-temp| sed 's|<p lang="en" >|EN - |; s|<p class="ml-4 " >|BG - |; s|<strong>||g; s|</strong>||g; s|</p>||; s|&#39;|`|g'
+		grep -A 6 -m 3 'lang="en" class="w' $HOME/.Bash-Translator-temp| sed 's|lang="en" class="w-1/2 dir-aware-pr-1 "|EN |; s|<p|BG |; s|class="w-1/2 px-1 ml-2 "||g; s|<strong>||g; s|</strong>||g; s|</p>||; s|&#39;|`|g'
+
+		#Old
+		#grep -A 1 -m 3 '<p lang="en" >' $HOME/.Bash-Translator-temp| sed 's|<p lang="en" >|EN - |; s|<p class="ml-4 " >|BG - |; s|<strong>||g; s|</strong>||g; s|</p>||; s|&#39;|`|g'
 		
 		printf $tildaP
 
@@ -47,14 +59,21 @@ function main(){
 		printf "\n $resultP\n"
 		
 		# With sed command
-		grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[a-z]*"'| sed '/"phrase"/d; s/"//g'
+		
+		grep -m 3 '</h3>' $HOME/.Bash-Translator-temp| tr -d '>'| sed 's|</h3||g; s|lang="en" ||g'
+
+		#Old
+		#grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[a-z]*"'| sed '/"phrase"/d; s/"//g'
 
 		# With tr command
 		#grep -m 3 'data-translation=' $HOME/.Bash-Translator-temp| grep -o -E '"[a-z]*"'| sed '/"phrase"/d'| tr -d /\"/
 		# Examples
 		printf "\n $egP\n"
-		
-		grep -A 1 -m 3 '<p >' $HOME/.Bash-Translator-temp | sed 's|<p class="ml-4 " lang="en" >|EN - |; s|<p >|BG - |; s|<strong>||g; s|</strong>||g; s|</p>||; s|&#39;|`|g'
+	
+		#Old
+		#grep -A 1 -m 3 '<p >' $HOME/.Bash-Translator-temp | sed 's|<p class="ml-4 " lang="en" >|EN - |; s|<p >|BG - |; s|<strong>||g; s|</strong>||g; s|</p>||; s|&#39;|`|g'
+
+		grep -A 6 -m 3 'class="w-1/2 dir-aware-pr' $HOME/.Bash-Translator-temp| sed 's|lang="en" >|EN |; s|class="w-1/2 dir-aware-pr-1 "|BG |g; s|<p||; s|class="w-1/2 px-1 ml-2 "||g; s|<strong>||g; s|</strong>||g; s|</p>||; s|&#39;|`|g'
 
 		printf $tildaP
 	fi
